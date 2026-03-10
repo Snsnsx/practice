@@ -5,6 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Случайная изменчивость — Практическая работа</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+
+<!-- MathJax -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['\\[', '\\]']],
+      tags: 'none',
+    },
+    options: {
+      skipHtmlTags: ['script','noscript','style','textarea','pre'],
+    },
+    startup: {
+      typeset: true,
+    }
+  };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <style>
   :root {
     --ink: #1a1a18;
@@ -165,20 +184,31 @@
     border-radius: 50%;
     margin-top: 0.15rem;
   }
-  .step-body { font-size: 0.93rem; }
+  .step-body { font-size: 0.93rem; line-height: 1.65; }
 
-  /* Math inline */
-  .math {
-    font-family: var(--mono);
-    font-size: 0.88rem;
+  /* ─── FORMULA BLOCK (replaces .math) ─── */
+  .formula-block {
     background: var(--highlight);
-    border-left: 2.5px solid var(--accent);
-    padding: 0.6rem 1rem;
+    border-left: 3px solid var(--accent);
+    border-radius: 0 3px 3px 0;
+    padding: 0.65rem 1.1rem 0.65rem 1rem;
     margin: 0.75rem 0;
-    display: block;
     overflow-x: auto;
-    border-radius: 0 2px 2px 0;
-    white-space: nowrap;
+    /* let MathJax scale naturally */
+    display: block;
+  }
+
+  /* MathJax output sits inside .formula-block — center it */
+  .formula-block mjx-container {
+    display: block !important;
+    text-align: center !important;
+    margin: 0 auto !important;
+    font-size: 1.08em !important;
+  }
+
+  /* Inline formulas inside step-body prose */
+  .step-body mjx-container[display="false"] {
+    display: inline !important;
   }
 
   /* Tables */
@@ -200,6 +230,9 @@
     text-align: left;
     white-space: nowrap;
   }
+  /* MathJax inside table headers — keep light */
+  th mjx-container { color: var(--paper) !important; }
+
   td {
     padding: 0.6rem 0.85rem;
     border-bottom: 1px solid var(--rule);
@@ -232,46 +265,8 @@
     font-size: 0.8rem;
   }
   .sum-label { color: var(--accent); }
-
-  /* Computed value */
-  .computed-val {
-    font-family: var(--mono);
-    color: var(--accent);
-  }
-
-  /* Calc button */
-  .calc-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.6rem 1.2rem;
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    background: var(--accent);
-    border: none;
-    color: white;
-    cursor: pointer;
-    border-radius: 2px;
-    margin-top: 0.75rem;
-    transition: opacity 0.15s;
-  }
-  .calc-btn:hover { opacity: 0.85; }
-
-  /* Result badge */
-  .result-box {
-    margin-top: 1.25rem;
-    padding: 1rem 1.25rem;
-    background: white;
-    border: 1px solid var(--rule);
-    border-left: 3px solid var(--accent);
-    font-family: var(--mono);
-    font-size: 0.88rem;
-    display: none;
-  }
-  .result-box.show { display: block; }
-  .result-box span { color: var(--accent); font-weight: 500; }
+  /* MathJax inside sum-label */
+  .sum-label mjx-container { display: inline !important; vertical-align: middle; }
 
   /* Report section */
   .report-block {
@@ -328,26 +323,6 @@
     .section { padding: 1.25rem 1rem 2.5rem; }
     th, td { padding: 0.5rem 0.6rem; }
   }
-  /* Image frame */
-  .img-frame {
-    width: 100%;
-    min-height: 220px;
-    border: 1.5px dashed var(--rule);
-    background: #ece9e1;
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-start;
-    margin: 1.5rem 0;
-    padding: 0.6rem 0.85rem;
-  }
-  .img-frame-label {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
 </style>
 </head>
 <body>
@@ -397,9 +372,13 @@
   <span class="section-num">01 — Упражнение 1</span>
   <h2>Набор данных с устойчивым трендом</h2>
 
-  <p>Зависимость энергии <em>E</em> фотона от длины световой волны λ — обратная пропорциональность:</p>
-  <span class="math">E(λ) = A / λ</span>
-  <p>где <em>A</em> — константа пропорциональности.</p>
+  <p>Зависимость энергии \(E\) фотона от длины световой волны \(\lambda\) — обратная пропорциональность:</p>
+
+  <div class="formula-block">
+    \[\displaystyle E(\lambda) = \frac{A}{\lambda}\]
+  </div>
+
+  <p>где \(A\) — константа пропорциональности.</p>
 
   <img src="rainbow.png" style="width:100%;margin:1.5rem 0;border:1px solid #c8c0b0;" alt="График E(λ)">
 
@@ -407,18 +386,22 @@
   <div class="steps">
     <div class="step">
       <div class="step-num">1</div>
-      <div class="step-body">Поочерёдно возьмите несколько точек на графике (каждая точка — пара E<sub>i</sub>, λ<sub>i</sub>).</div>
+      <div class="step-body">Поочерёдно возьмите несколько точек на графике (каждая точка — пара \(E_i,\;\lambda_i\)).</div>
     </div>
     <div class="step">
       <div class="step-num">2</div>
-      <div class="step-body">Для каждой пары найдите A<sub>i</sub>:
-        <span class="math">A_i = E_i · λ_i</span>
+      <div class="step-body">Для каждой пары найдите \(A_i\):
+        <div class="formula-block">
+          \[A_i = E_i \cdot \lambda_i\]
+        </div>
       </div>
     </div>
     <div class="step">
       <div class="step-num">3</div>
-      <div class="step-body">В качестве оценки параметра A возьмите среднее:
-        <span class="math">A = (A₁ + A₂ + … + Aₙ) / n</span>
+      <div class="step-body">В качестве оценки параметра \(A\) возьмите среднее:
+        <div class="formula-block">
+          \[\displaystyle A = \frac{A_1 + A_2 + \cdots + A_n}{n}\]
+        </div>
       </div>
     </div>
   </div>
@@ -428,9 +411,9 @@
     <table id="table1">
       <thead>
         <tr>
-          <th>λᵢ, нм</th>
-          <th>Eᵢ, эВ</th>
-          <th>Aᵢ = Eᵢ · λᵢ</th>
+          <th>\(\lambda_i\), нм</th>
+          <th>\(E_i\), эВ</th>
+          <th>\(A_i = E_i \cdot \lambda_i\)</th>
         </tr>
       </thead>
       <tbody id="tbody1">
@@ -442,7 +425,7 @@
       </tbody>
       <tfoot>
         <tr class="sum-row">
-          <td colspan="2" class="sum-label">Среднее A =</td>
+          <td colspan="2" class="sum-label">Среднее \(A =\)</td>
           <td class="computed-val"><input class="cell-input"></td>
         </tr>
       </tfoot>
@@ -455,7 +438,7 @@
   <span class="section-num">02 — Упражнение 2</span>
   <h2>Набор данных периодического толка</h2>
 
-  <img src="moon.png" style="width:100%;margin:1.5rem 0;border:1px solid #c8c0b0;" alt="График E(λ)">
+  <img src="moon.png" style="width:100%;margin:1.5rem 0;border:1px solid #c8c0b0;" alt="График освещённости">
 
   <h3>Порядок выполнения</h3>
   <div class="steps">
@@ -466,15 +449,19 @@
     <div class="step">
       <div class="step-num">2</div>
       <div class="step-body">Найдите среднее значение освещённости:
-        <span class="math">ȳ = (y₁ + y₂ + … + yₙ) / n</span>
+        <div class="formula-block">
+          \[\displaystyle \bar{y} = \frac{y_1 + y_2 + \cdots + y_n}{n}\]
+        </div>
       </div>
     </div>
     <div class="step">
       <div class="step-num">3</div>
       <div class="step-body">Убедитесь в симметрии пиков:
-        <span class="math">Δhigh = ymax − ȳ</span>
-        <span class="math">Δlow  = ȳ − ymin</span>
-        <span class="math">Δlow ≈ Δhigh</span>
+        <div class="formula-block">
+          \[\Delta_{\text{high}} = y_{\max} - \bar{y}\]
+          \[\Delta_{\text{low}}  = \bar{y} - y_{\min}\]
+          \[\Delta_{\text{low}} \approx \Delta_{\text{high}}\]
+        </div>
       </div>
     </div>
   </div>
@@ -483,7 +470,7 @@
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>№</th><th>xᵢ (время)</th><th>yᵢ (освещённость)</th></tr>
+        <tr><th>№</th><th>\(x_i\) (время)</th><th>\(y_i\) (освещённость)</th></tr>
       </thead>
       <tbody id="tbody2">
         <tr><td style="font-family:var(--mono);font-size:0.8rem;">1</td><td><input class="cell-input"></td><td><input class="cell-input"></td></tr>
@@ -496,9 +483,9 @@
         <tr><td style="font-family:var(--mono);font-size:0.8rem;">8</td><td><input class="cell-input"></td><td><input class="cell-input"></td></tr>
       </tbody>
       <tfoot>
-        <tr class="sum-row"><td colspan="2" class="sum-label">Среднее ȳ</td><td class="computed-val"><input class="cell-input"></td></tr>
-        <tr class="sum-row"><td colspan="2" class="sum-label">Δhigh = ymax − ȳ</td><td class="computed-val"><input class="cell-input"></td></tr>
-        <tr class="sum-row"><td colspan="2" class="sum-label">Δlow = ȳ − ymin</td><td class="computed-val"><input class="cell-input"></td></tr>
+        <tr class="sum-row"><td colspan="2" class="sum-label">Среднее \(\bar{y}\)</td><td class="computed-val"><input class="cell-input"></td></tr>
+        <tr class="sum-row"><td colspan="2" class="sum-label">\(\Delta_{\text{high}} = y_{\max} - \bar{y}\)</td><td class="computed-val"><input class="cell-input"></td></tr>
+        <tr class="sum-row"><td colspan="2" class="sum-label">\(\Delta_{\text{low}} = \bar{y} - y_{\min}\)</td><td class="computed-val"><input class="cell-input"></td></tr>
       </tfoot>
     </table>
   </div>
@@ -509,18 +496,22 @@
   <span class="section-num">03 — Упражнение 3</span>
   <h2>Набор данных с флуктуациями</h2>
 
-  <img src="mean_temp.png" style="width:100%;margin:1.5rem 0;border:1px solid #c8c0b0;" alt="График E(λ)">
+  <img src="mean_temp.png" style="width:100%;margin:1.5rem 0;border:1px solid #c8c0b0;" alt="График температуры">
 
   <h3>Порядок выполнения</h3>
   <div class="steps">
     <div class="step"><div class="step-num">1</div><div class="step-body">Возьмите у преподавателя индивидуальный набор данных о среднемесячной температуре за 10 лет.</div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-body">Постройте точечный график рассеяния (ось X — годы, ось Y — температура). Последовательно соедините точки прямыми линиями.</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body">Постройте точечный график рассеяния (ось \(X\) — годы, ось \(Y\) — температура). Последовательно соедините точки прямыми линиями.</div></div>
     <div class="step"><div class="step-num">3</div><div class="step-body">Посчитайте среднее арифметическое:
-      <span class="math">T̄ = (t₁ + t₂ + … + t₁₀) / 10</span>
+      <div class="formula-block">
+        \[\displaystyle \bar{T} = \frac{t_1 + t_2 + \cdots + t_{10}}{10}\]
+      </div>
     </div></div>
-    <div class="step"><div class="step-num">4</div><div class="step-body">Проведите базовую линию T̄ на графике (другим цветом или пунктиром).</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body">Проведите базовую линию \(\bar{T}\) на графике (другим цветом или пунктиром).</div></div>
     <div class="step"><div class="step-num">5</div><div class="step-body">Посчитайте отклонения от среднего:
-      <span class="math">Δᵢ = T̄ − tᵢ</span>
+      <div class="formula-block">
+        \[\Delta_i = \bar{T} - t_i\]
+      </div>
     </div></div>
     <div class="step"><div class="step-num">6</div><div class="step-body">Проанализируйте поведение отклонений по годам.</div></div>
   </div>
@@ -529,7 +520,7 @@
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Год</th><th>Температура tᵢ, °C</th><th>Отклонение Δᵢ = T̄ − tᵢ</th></tr>
+        <tr><th>Год</th><th>Температура \(t_i\), °C</th><th>Отклонение \(\Delta_i = \bar{T} - t_i\)</th></tr>
       </thead>
       <tbody id="tbody3">
         <tr><td style="font-family:var(--mono);font-size:0.8rem;">1</td><td><input class="cell-input"></td><td class="computed-val"><input class="cell-input"></td></tr>
@@ -544,7 +535,7 @@
         <tr><td style="font-family:var(--mono);font-size:0.8rem;">10</td><td><input class="cell-input"></td><td class="computed-val"><input class="cell-input"></td></tr>
       </tbody>
       <tfoot>
-        <tr class="sum-row"><td colspan="2" class="sum-label">Среднее T̄</td><td class="computed-val"><input class="cell-input"></td></tr>
+        <tr class="sum-row"><td colspan="2" class="sum-label">Среднее \(\bar{T}\)</td><td class="computed-val"><input class="cell-input"></td></tr>
       </tfoot>
     </table>
   </div>
@@ -606,7 +597,7 @@
     <ul class="report-list">
       <li>Выполнять на миллиметровой бумаге или в клетку</li>
       <li>Подписанные оси, масштаб, название</li>
-      <li>Базовая линия T̄ — другим цветом или пунктиром</li>
+      <li>Базовая линия \(\bar{T}\) — другим цветом или пунктиром</li>
       <li>Таблицы — аккуратно, без исправлений поверх написанного</li>
     </ul>
   </div>
@@ -622,8 +613,11 @@ function showSection(id, btn) {
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Re-typeset MathJax for newly visible content
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([document.getElementById(id)]);
+  }
 }
-
 </script>
 </body>
 </html>
